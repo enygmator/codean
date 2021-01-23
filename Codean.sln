@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeanBlazorDevEnvShare", "CodeanBlazorDevEnvShare\CodeanBlazorDevEnvShare.csproj", "{66B4D5EA-5BF6-4C77-902A-C645C3E2897D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatProject", "ChatProject\ChatProject.csproj", "{D005058B-69AB-4CFF-878C-3EA6137767CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatProject", "ChatProject\ChatProject.csproj", "{D005058B-69AB-4CFF-878C-3EA6137767CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

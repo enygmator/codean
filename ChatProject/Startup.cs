@@ -1,3 +1,4 @@
+using BlazorChat;
 using ChatProject.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
@@ -49,12 +50,14 @@ namespace ChatProject
             app.UseStaticFiles();
 
             app.UseRouting();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapHub<BlazorChatHub>(BlazorChatHub.HubUrl);
             });
+            
         }
+
     }
 }
