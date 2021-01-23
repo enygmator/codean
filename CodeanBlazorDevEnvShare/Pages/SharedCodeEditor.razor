@@ -1,0 +1,15 @@
+﻿<h3>SharedCodeEditor</h3>
+
+<MonacoEditor CssClass="editor" Id="any-id-string" ConstructionOptions="EditorConstructionOptions"/>
+
+@code {
+    private StandaloneEditorConstructionOptions EditorConstructionOptions(MonacoEditor editor)
+	{
+        return new StandaloneEditorConstructionOptions
+        {
+            AutomaticLayout = true,
+            Language = "javascript",
+            Value = "function xyz() "
+		};
+	}
+}
