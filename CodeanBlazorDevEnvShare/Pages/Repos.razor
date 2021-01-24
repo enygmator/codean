@@ -3,29 +3,38 @@
 
 <h3>Repos</h3>
 
-@if(teamName != null && repos != null)
+@if(teamName != null)
 {
-    <table>
-    <thead>
-        <td>Repo Name</td>
-        <td></td>
-    </thead>
-    @foreach (var repo in repos)
+    if (repos != null)
     {
-        <tr>
-            <td>@repo</td>
-            <td>
-                <input type="button" class="btn btn-primary" value="Open Repo" @onclick="(() => { OpenRepo(repo); })"/>
-            </td>
-            @* <td>
-                <input type="button" class="btn btn-danger" value="Delete" @onclick="(() => { DeleteRepo(teamName); })" />
-            </td> *@
-        </tr>
+        <table>
+        <thead>
+            <td>Repo Name</td>
+            <td></td>
+        </thead>
+        @foreach (var repo in repos)
+        {
+            <tr>
+                <td>@repo</td>
+                <td>
+                    <input type="button" class="btn btn-primary" value="Open Repo" @onclick="(() => { OpenRepo(repo); })"/>
+                </td>
+                @* <td>
+                    <input type="button" class="btn btn-danger" value="Delete" @onclick="(() => { DeleteRepo(teamName); })" />
+                </td> *@
+            </tr>
+        }
+        </table>
     }
-    </table>
+    else
+    {
+        <h3>Add a repo!</h3>
+    }
     <br />
+    <input @bind="UserName" @bind:event="oninput"/>
+    <button @onclick="() => { AddUser(teamName, UserName); }">Add User</button>
     <input @bind="RepoName" @bind:event="oninput"/>
-    <button @onclick="(() => { CreateRepo(teamName, RepoName); })">Create Team</button>
+    <button @onclick="() => { CreateRepo(teamName, RepoName); }">Create Repo</button>
 
     @if(SelectedRepo != null)
     {
@@ -45,14 +54,17 @@ else
     List<string> repos;
     
     private string RepoName;
+
+    private string UserName;
         
     public string SelectedRepo;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         if(teamName != null)
         {
-            repos = teamsService.GetReposList(teamName);
+            Console.WriteLine(teamName);
+            repos = await teamsService.GetReposList(teamName);
         }
         StateHasChanged();
     }
@@ -66,5 +78,10 @@ else
     private void CreateRepo(string teamName, string repoName)
     {
         teamsService.AddRepoToTeam(teamName, repoName);
+    }
+
+    private void AddUser(string teamName, string UserName)
+    {
+        teamsService.AddUserToTeam(teamName, UserName, false);
     }
 }

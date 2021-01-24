@@ -15,7 +15,7 @@ namespace CodeanBlazorDevEnvShare.services
         void CreateTeam(string TeamName, string UserName);
         void DeleteTeam(string TeamName);
         void AddRepoToTeam(string TeamName, string RepoName);
-        List<string> GetReposList(string TeamName);
+        Task<List<string>> GetReposList(string TeamName);
     }
 
     public class TeamsService : ITeamsService
@@ -49,26 +49,27 @@ namespace CodeanBlazorDevEnvShare.services
             return Query3.ToList();
         }
 
-        public List<string> GetReposList(string TeamName)
+        public async Task<List<string>> GetReposList(string TeamName)
         {
+            List<Team> teams = await _context.Teams.ToListAsync();
             IEnumerable<Team> Query1 =
-            from team in _context.Teams
+            from team in teams
             where team.Name == TeamName
             select team;
 
             Team t = Query1.FirstOrDefault();
             if (t != null)
             {
-                IEnumerable<string> Query2 =
-                from repo in t.Repos
-                select repo.Name;
+                if(t.Repos != null)
+                {
+                    IEnumerable<string> Query2 =
+                    from repo in t.Repos
+                    select repo.Name;
 
-                return Query2.ToList();
+                    return Query2.ToList();
+                }
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         public void AddUserToTeam(string TeamName, string UserName, bool _IsAdmin)
@@ -131,12 +132,20 @@ namespace CodeanBlazorDevEnvShare.services
             Team t = Query1.FirstOrDefault();
             if (t != null)
             {
-                IEnumerable<Repo> Query2 =
-                from repo in t.Repos
-                where repo.Name == RepoName
-                select repo;
+                Repo r = null;
+                if(t.Repos != null)
+                {
+                    IEnumerable<Repo> Query2 =
+                    from repo in t.Repos
+                    where repo.Name == RepoName
+                    select repo;
+                    r = Query2.FirstOrDefault();
+                }
+                else
+                {
+                    t.Repos = new List<Repo>();
+                }
 
-                Repo r = Query2.FirstOrDefault();
                 if (r == null)
                 {
                     t.Repos.Add(new Repo { Name = RepoName });

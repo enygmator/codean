@@ -88,9 +88,10 @@
         StateHasChanged();
     }
 
-    private async void OpenTeamRepos(string TeamName)
+    private void OpenTeamRepos(string TeamName)
     {
         SelectedTeam = TeamName;
+        Console.WriteLine(SelectedTeam);
         StateHasChanged();
     }
 }
