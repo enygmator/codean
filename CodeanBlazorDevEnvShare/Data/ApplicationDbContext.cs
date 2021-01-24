@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using CodeanBlazorDevEnvShare.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,13 @@ namespace CodeanBlazorDevEnvShare.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+        }
+
+        public DbSet<Team> Teams { get; set; }
+
+        public override int SaveChanges()
+        {
+            return base.SaveChanges();
         }
     }
 }

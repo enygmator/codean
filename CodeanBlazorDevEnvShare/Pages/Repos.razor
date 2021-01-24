@@ -1,0 +1,70 @@
+﻿@using CodeanBlazorDevEnvShare.services;
+@inject ITeamsService teamsService;
+
+<h3>Repos</h3>
+
+@if(teamName != null && repos != null)
+{
+    <table>
+    <thead>
+        <td>Repo Name</td>
+        <td></td>
+    </thead>
+    @foreach (var repo in repos)
+    {
+        <tr>
+            <td>@repo</td>
+            <td>
+                <input type="button" class="btn btn-primary" value="Open Repo" @onclick="(() => { OpenRepo(repo); })"/>
+            </td>
+            @* <td>
+                <input type="button" class="btn btn-danger" value="Delete" @onclick="(() => { DeleteRepo(teamName); })" />
+            </td> *@
+        </tr>
+    }
+    </table>
+    <br />
+    <input @bind="RepoName" @bind:event="oninput"/>
+    <button @onclick="(() => { CreateRepo(teamName, RepoName); })">Create Team</button>
+
+    @if(SelectedRepo != null)
+    {
+        <SharedCodeEditor></SharedCodeEditor>
+    }
+    
+}
+else
+{
+    <h3>Select a Team!</h3>
+}
+
+@code {
+    [Parameter]
+    public string teamName { get; set; }
+
+    List<string> repos;
+    
+    private string RepoName;
+        
+    public string SelectedRepo;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(teamName != null)
+        {
+            repos = teamsService.GetReposList(teamName);
+        }
+        StateHasChanged();
+    }
+
+    private void OpenRepo(string repoName)
+    {
+        SelectedRepo = repoName;
+        //StateHasChanged();
+    }
+
+    private void CreateRepo(string teamName, string repoName)
+    {
+        teamsService.AddRepoToTeam(teamName, repoName);
+    }
+}

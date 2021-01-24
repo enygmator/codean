@@ -48,3 +48,19 @@ a, .btn-link {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+.editor {
+    height: 90%;
+    width: 70%;
+}
+
+.inline {
+    display: inline;
+}
+
+.chatbox {
+    width: 30%;
+    height: 90%;
+    position:relative;
+    margin-right: 0px;
+}

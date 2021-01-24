@@ -1,5 +1,7 @@
+using BlazorChat;
 using CodeanBlazorDevEnvShare.Areas.Identity;
 using CodeanBlazorDevEnvShare.Data;
+using CodeanBlazorDevEnvShare.services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -39,8 +41,9 @@ namespace CodeanBlazorDevEnvShare
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+            services.AddTransient<ITeamsService, TeamsService>();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<StringSync>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,6 +74,7 @@ namespace CodeanBlazorDevEnvShare
                 endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapHub<BlazorChatHub>(BlazorChatHub.HubUrl);
             });
         }
     }

@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CodeanBlazorDevEnvShare.Data
+namespace ChatProject.Data
 {
     public class WeatherForecastService
     {

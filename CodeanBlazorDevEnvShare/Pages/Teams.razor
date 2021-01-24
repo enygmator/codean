@@ -1,0 +1,96 @@
+﻿@page "/"
+@using CodeanBlazorDevEnvShare.services;
+@inject ITeamsService teamsService;
+
+<h3>Welcome To Codean - Teams</h3>
+
+<AuthorizeView>
+    <Authorized>
+        <h4>Hello, @context.User.Identity.Name!</h4>
+        <br />
+        @if (teams.Count != 0)
+        {
+            <table>
+                <thead>
+                    <td>team Name</td>
+                    <td>Admin</td>
+                    <td></td>
+                    <td></td>
+                </thead>
+                @foreach (var (teamName, isAdmin) in teams)
+                {
+                    <tr>
+                        <td>@teamName</td>
+                        <td>@isAdmin</td>
+                        <td>
+                            <input type="button" class="btn btn-primary" value="Open Team" @onclick="(() => { OpenTeamRepos(teamName); })"/>
+                        </td>
+                        <td>
+                            <input type="button" class="btn btn-danger" value="Delete" @onclick="(() => { DeleteTeam(teamName); })" />
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <h4>You are not part of a team</h4>
+        }
+        <br />
+        <input @bind="TeamName" @bind:event="oninput"/>
+        <button @onclick="CreateTeam">Create Team</button>
+
+        <Repos teamName="@SelectedTeam"></Repos>
+        
+    </Authorized>
+    <NotAuthorized>
+        <h1>Authenticated Error!</h1>
+        <p>You're not signed in. Please sign in tobject access thdatalist page</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    List<(string, bool)> teams;
+
+    private string TeamName;
+    
+    public string SelectedTeam;
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await authenticationStateTask;
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            teams = teamsService.GetTeamsList(user.Identity.Name);
+        }
+    }
+
+    private async void CreateTeam()
+    {
+        var authState = await authenticationStateTask;
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            teamsService.CreateTeam(TeamName, user.Identity.Name);
+        }
+        StateHasChanged();
+    }
+
+    private void DeleteTeam(string TeamName)
+    {
+        teamsService.DeleteTeam(TeamName);
+        StateHasChanged();
+    }
+
+    private async void OpenTeamRepos(string TeamName)
+    {
+        SelectedTeam = TeamName;
+        StateHasChanged();
+    }
+}

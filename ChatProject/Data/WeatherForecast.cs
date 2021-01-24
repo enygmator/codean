@@ -1,6 +1,6 @@
 using System;
 
-namespace CodeanBlazorDevEnvShare.Data
+namespace ChatProject.Data
 {
     public class WeatherForecast
     {

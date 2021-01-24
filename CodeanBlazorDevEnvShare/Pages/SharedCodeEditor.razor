@@ -1,0 +1,36 @@
+﻿@using CodeanBlazorDevEnvShare.Data;
+@inject StringSync codeSync;
+@inject IJSRuntime JS;
+
+<h3>SharedCodeEditor</h3>
+
+<MonacoEditor @ref="editor" CssClass="editor" 
+Id="any-id-string" ConstructionOptions="EditorConstructionOptions" OnKeyUp="KeyUp"/>
+
+@code {
+    MonacoEditor editor;
+
+    private StandaloneEditorConstructionOptions EditorConstructionOptions(MonacoEditor editor)
+	{
+        codeSync.CodeChangeEvent += HandleCodeChangeEvent;
+        return new StandaloneEditorConstructionOptions
+        {
+            AutomaticLayout = true,
+            Language = "javascript",
+            Value = "function xyz() "
+		};
+	}
+
+    private async void HandleCodeChangeEvent(object sender, CodeChangeEventArgs e)
+    {
+        await editor.SetValue(codeSync.Code); //this will not trigger keyup
+        await editor.SetPosition(e.Pos);
+    }
+
+    private async Task KeyUp(KeyboardEvent args)
+    {
+        Position pos = await editor.GetPosition();
+        codeSync.SetCode(await editor.GetValue(), pos);
+        //codeSync.Code = await JS.InvokeAsync<string>("getEditorValue", editor);
+    }
+}
