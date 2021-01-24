@@ -1,5 +1,6 @@
 using CodeanBlazorDevEnvShare.Areas.Identity;
 using CodeanBlazorDevEnvShare.Data;
+using CodeanBlazorDevEnvShare.services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -39,8 +40,8 @@ namespace CodeanBlazorDevEnvShare
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+            services.AddTransient<ITeamsService, TeamsService>();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<StringSync>();
         }
 
