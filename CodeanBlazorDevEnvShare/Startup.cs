@@ -1,3 +1,4 @@
+using BlazorChat;
 using CodeanBlazorDevEnvShare.Areas.Identity;
 using CodeanBlazorDevEnvShare.Data;
 using CodeanBlazorDevEnvShare.services;
@@ -73,6 +74,7 @@ namespace CodeanBlazorDevEnvShare
                 endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapHub<BlazorChatHub>(BlazorChatHub.HubUrl);
             });
         }
     }
